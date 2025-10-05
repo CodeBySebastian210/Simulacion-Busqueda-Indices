@@ -62,6 +62,11 @@ public class SimuladorIndices extends javax.swing.JFrame {
         jLabel3.setText("Clave a buscar:");
 
         btnConstruir.setText("Construir");
+        btnConstruir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConstruirActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setText("Buscar");
 
@@ -135,6 +140,45 @@ public class SimuladorIndices extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnConstruirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConstruirActionPerformed
+        // TODO add your handling code here:
+        try {
+            String[] partes = txtDatos.getText().split(",");
+            int tamIndice = Integer.parseInt(txtTamIndice.getText().trim());
+
+            if (tamIndice <= 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                        "El tamaño del índice debe ser mayor que 0.", 
+                        "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tablaIndices.getModel();
+            modelo.setRowCount(0); 
+
+            areaLog.setText(""); 
+            areaLog.append("Construyendo índice con tamaño " + tamIndice + "...\n");
+
+            for (int i = 0; i < partes.length; i += tamIndice) {
+                String valor = partes[i].trim();
+                modelo.addRow(new Object[]{valor, i});
+                areaLog.append("Índice agregado: Valor " + valor + " en posición " + i + "\n");
+            }
+
+            areaLog.append("Índice construido correctamente.\n");
+            btnBuscar.setEnabled(true);
+
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Ingrese un tamaño de índice numérico válido.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Ocurrió un error al construir el índice.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnConstruirActionPerformed
 
     /**
      * @param args the command line arguments
