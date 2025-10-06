@@ -69,6 +69,11 @@ public class SimuladorIndices extends javax.swing.JFrame {
         });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar");
 
@@ -179,6 +184,73 @@ public class SimuladorIndices extends javax.swing.JFrame {
                     "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnConstruirActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        try {
+            String[] partes = txtDatos.getText().split(",");
+            int clave = Integer.parseInt(txtClave.getText().trim());
+
+            if (partes.length == 0 || tablaIndices.getRowCount() == 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                        "Primero construya el índice antes de buscar.", 
+                        "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            areaLog.append("\n🔎 Iniciando búsqueda de la clave " + clave + "...\n");
+
+            int inicio = 0;
+            int fin = partes.length - 1;
+
+            for (int i = 0; i < tablaIndices.getRowCount(); i++) {
+                int valorIndice = Integer.parseInt(tablaIndices.getValueAt(i, 0).toString());
+                int posicionIndice = Integer.parseInt(tablaIndices.getValueAt(i, 1).toString());
+
+                areaLog.append("Comparando clave con índice " + valorIndice + " en posición " + posicionIndice + "\n");
+
+                if (clave < valorIndice) {
+                    fin = posicionIndice - 1;
+                    break;
+                } else {
+                    inicio = posicionIndice;
+                }
+            }
+
+            areaLog.append("Posible rango de búsqueda: desde posición " + inicio + " hasta " + fin + "\n");
+
+            boolean encontrado = false;
+            for (int i = inicio; i <= fin && i < partes.length; i++) {
+                int valor = Integer.parseInt(partes[i].trim());
+                areaLog.append("Comparando clave " + clave + " con valor " + valor + "\n");
+
+                if (valor == clave) {
+                    areaLog.append("✔ Clave encontrada en posición " + i + "\n\n");
+                    javax.swing.JOptionPane.showMessageDialog(this, 
+                            "Clave encontrada en posición " + i, 
+                            "Resultado", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                areaLog.append("❌ Clave no encontrada.\n\n");
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                        "Clave no encontrada.", 
+                        "Resultado", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Ingrese una clave numérica válida.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Error durante la búsqueda.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
