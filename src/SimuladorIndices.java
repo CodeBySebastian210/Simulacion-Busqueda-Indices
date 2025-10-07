@@ -76,6 +76,11 @@ public class SimuladorIndices extends javax.swing.JFrame {
         });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         areaLog.setColumns(20);
         areaLog.setRows(5);
@@ -251,6 +256,21 @@ public class SimuladorIndices extends javax.swing.JFrame {
                     "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+        txtDatos.setText("");
+        txtTamIndice.setText("");
+        txtClave.setText("");
+        areaLog.setText("");
+
+        javax.swing.table.DefaultTableModel modelo = 
+            (javax.swing.table.DefaultTableModel) tablaIndices.getModel();
+        modelo.setRowCount(0);
+
+        btnBuscar.setEnabled(false);
+        areaLog.append("✔ Interfaz limpia. Lista para una nueva simulación.\n");
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
